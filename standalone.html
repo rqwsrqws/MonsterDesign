@@ -15,6 +15,7 @@
           radial-gradient(900px 480px at 18% 12%, rgba(168, 85, 247, 0.22), transparent 55%),
           linear-gradient(180deg, #09070f, #11081c);
       }
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 80px 24px 64px; }
       .brand {
         display: flex;
         align-items: center;
@@ -38,11 +39,21 @@
         gap: 40px;
         align-items: center;
       }
-      .hero-3d-logo {
+      .hero-3d-logo,
+      .logo-anim {
         width: min(100%, 420px);
         height: auto;
         margin: 0 auto;
-        filter: drop-shadow(0 18px 40px rgba(34, 158, 217, 0.28));
+        display: block;
+        background: transparent;
+        border: 0;
+        outline: none;
+        box-shadow: none;
+        pointer-events: none;
+        mix-blend-mode: screen;
+        filter: none;
+        -webkit-mask-image: radial-gradient(ellipse 52% 78% at 50% 36%, #000 34%, rgba(0, 0, 0, 0.82) 54%, transparent 72%);
+        mask-image: radial-gradient(ellipse 52% 78% at 50% 36%, #000 34%, rgba(0, 0, 0, 0.82) 54%, transparent 72%);
       }
       @media (max-width: 800px) {
         .layout { grid-template-columns: 1fr; }
@@ -88,6 +99,14 @@
         font-weight: 700; color: white; cursor: pointer;
         background: linear-gradient(90deg, #7c3aed, #d946ef);
       }
+      .video-block {
+        margin-top: 72px;
+        display: flex;
+        justify-content: center;
+      }
+      .video-block .logo-anim {
+        width: min(100%, 720px);
+      }
     </style>
   </head>
   <body>
@@ -113,8 +132,11 @@
       <p style="opacity:.72;font-size:18px">3D-лого паук + Telegram без белого фона. Смотри, как садится на тёмный сайт.</p>
       <button type="button" id="replay">Повторить анимацию</button>
         </div>
-        <img class="hero-3d-logo" src="./spider-telegram-logo.png" alt="Паук на логотипе Telegram" width="520" height="413" />
+        <video class="hero-3d-logo" src="./generated_video.mp4" autoplay muted playsinline disablepictureinpicture></video>
       </div>
+      <section class="video-block">
+        <video class="logo-anim" src="./generated_video.mp4" autoplay muted playsinline disablepictureinpicture></video>
+      </section>
     </div>
     <script>
       const LEGS = [
@@ -251,6 +273,10 @@
 
       document.getElementById("replay").onclick = play;
       play();
+      document.querySelectorAll("video").forEach((v) => {
+        v.muted = true;
+        v.play().catch(() => {});
+      });
     </script>
   </body>
 </html>

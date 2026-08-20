@@ -20,11 +20,9 @@
   letter-spacing: 0.02em;
 }
 
-.brand-logo,
-.hero-3d-logo {
+.brand-logo {
   display: block;
   background: transparent;
-  mix-blend-mode: normal;
 }
 
 .brand-logo {
@@ -33,11 +31,21 @@
   filter: drop-shadow(0 0 12px rgba(80, 200, 255, 0.45));
 }
 
-.hero-3d-logo {
+.hero-3d-logo,
+.logo-anim {
   width: min(100%, 420px);
   height: auto;
   margin: 0 auto 8px;
-  filter: drop-shadow(0 18px 40px rgba(34, 158, 217, 0.28));
+  display: block;
+  background: transparent;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: none;
+  -webkit-mask-image: radial-gradient(ellipse 52% 78% at 50% 36%, #000 34%, rgba(0, 0, 0, 0.82) 54%, transparent 72%);
+  mask-image: radial-gradient(ellipse 52% 78% at 50% 36%, #000 34%, rgba(0, 0, 0, 0.82) 54%, transparent 72%);
 }
 
 .brand-mark {
@@ -209,6 +217,17 @@
 .today {
   background: #14532d !important;
   color: #ecfdf5 !important;
+}
+
+.video-block {
+  margin-top: 64px;
+  display: flex;
+  justify-content: center;
+}
+
+.video-block .logo-anim {
+  width: min(100%, 720px);
+  margin: 0;
 }
 
 @keyframes logo-pulse {

@@ -1,4 +1,5 @@
 import logo3d from "../assets/spider-telegram-logo.png";
+import demoVideo from "../assets/generated_video.mp4";
 import TelegramSpiderMark from "./TelegramSpiderMark.jsx";
 import ClimbingSpider from "./ClimbingSpider.jsx";
 import "./Hero.css";
@@ -66,15 +67,17 @@ export default function Hero({ replayKey, onReplay }) {
           </ul>
         </div>
 
-        <aside className="preview" aria-hidden="true">
-          <img
+        <div className="hero-visual">
+          <video
             className="hero-3d-logo"
-            src={logo3d}
-            alt=""
-            width="520"
-            height="413"
+            src={demoVideo}
+            autoPlay
+            muted
+            playsInline
+            disablePictureInPicture
           />
-          <article className="card">
+          <aside className="preview" aria-hidden="true">
+            <article className="card">
             <header>
               Новый лид · Radar <span>HOT</span>
             </header>
@@ -96,7 +99,19 @@ export default function Hero({ replayKey, onReplay }) {
             <div className="today">Сегодня +34 лида</div>
           </div>
         </aside>
+        </div>
       </div>
+
+      <section className="video-block">
+        <video
+          className="logo-anim"
+          src={demoVideo}
+          autoPlay
+          muted
+          playsInline
+          disablePictureInPicture
+        />
+      </section>
     </section>
   );
 }
