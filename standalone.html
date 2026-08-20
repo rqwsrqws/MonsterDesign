@@ -328,6 +328,39 @@
         from { transform: translateX(0); }
         to { transform: translateX(-50%); }
       }
+      .loader-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .loader-light.is-dark {
+        color: #f4f0ff;
+        background:
+          radial-gradient(720px 420px at 50% 42%, rgba(168, 85, 247, 0.22), transparent 58%),
+          linear-gradient(180deg, #09070f 0%, #11081c 48%, #07060e 100%);
+      }
+      .loader-light.is-dark .spider-web-base {
+        opacity: 0.72;
+        filter: brightness(1.35) saturate(1.15);
+      }
+      .loader-light.is-dark .pulse-ring {
+        border-color: rgba(232, 121, 249, 0.28);
+      }
+      .loader-light.is-dark .loader-shell,
+      .loader-light.is-dark .loader-orb {
+        background: #16121c;
+      }
+      .loader-light.is-dark .loader-shell {
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45), 0 0 28px rgba(168, 85, 247, 0.18), 0 0 0 1px rgba(232, 121, 249, 0.16);
+      }
+      .loader-light.is-dark .loader-liquid {
+        background: linear-gradient(180deg, #e879f9 0%, #a855f7 48%, #6d28d9 100%);
+      }
+      .loader-light.is-dark .loader-wave { fill: #e879f9; }
+      .loader-light.is-dark .loader-brand { color: #f4f0ff; }
+      .loader-light.is-dark .loader-hint { color: rgba(244, 240, 255, 0.55); }
+      @media (max-width: 900px) {
+        .loader-pair { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body>
@@ -369,6 +402,7 @@
         </div>
       </section>
     </div>
+    <div class="loader-pair">
     <section class="loader-light" aria-label="Загрузка">
       <div class="pulse-stage" id="pulse-stage">
         <img class="spider-web spider-web-base" src="./spider-web.png" alt="" />
@@ -378,7 +412,7 @@
         <span class="pulse-ring"></span>
         <span class="pulse-ring"></span>
         <span class="pulse-ring"></span>
-        <div class="loader-shell" id="loader-shell">
+        <div class="loader-shell">
           <div class="loader-fill" aria-hidden="true">
             <div class="loader-liquid">
               <svg class="loader-wave" viewBox="0 0 120 20" preserveAspectRatio="none">
@@ -392,8 +426,34 @@
         </div>
       </div>
       <p class="loader-brand">Monster-Lead</p>
-      <p class="loader-hint" id="loader-hint">Загрузка 0%</p>
+      <p class="loader-hint">Загрузка 0%</p>
     </section>
+    <section class="loader-light is-dark" aria-label="Загрузка">
+      <div class="pulse-stage">
+        <img class="spider-web spider-web-base" src="./spider-web.png" alt="" />
+        <div class="web-surge">
+          <img class="spider-web" src="./spider-web.png" alt="" />
+        </div>
+        <span class="pulse-ring"></span>
+        <span class="pulse-ring"></span>
+        <span class="pulse-ring"></span>
+        <div class="loader-shell">
+          <div class="loader-fill" aria-hidden="true">
+            <div class="loader-liquid">
+              <svg class="loader-wave" viewBox="0 0 120 20" preserveAspectRatio="none">
+                <path d="M0 10 Q15 0 30 10 T60 10 T90 10 T120 10 V20 H0 Z" />
+              </svg>
+            </div>
+          </div>
+          <div class="loader-orb">
+            <video class="loader-video" src="./spider-white-sphere.mp4" autoplay muted loop playsinline disablepictureinpicture></video>
+          </div>
+        </div>
+      </div>
+      <p class="loader-brand">Monster-Lead</p>
+      <p class="loader-hint">Загрузка 0%</p>
+    </section>
+    </div>
     <script>
       const LEGS = [
         { id: "r1", x: 304, y: 278, rest: 68, tibia: 48, tarsus: 26, len: [84, 74, 60], phase: 0 },
@@ -535,14 +595,15 @@
       });
 
       (function simulateLoad() {
-        const shell = document.getElementById("loader-shell");
-        const hint = document.getElementById("loader-hint");
-        if (!shell) return;
+        const shells = document.querySelectorAll(".loader-shell");
+        const hints = document.querySelectorAll(".loader-hint");
+        if (!shells.length) return;
         let value = 0;
         const id = setInterval(() => {
           value = Math.min(100, value + 1.4 + Math.random() * 3.2);
-          shell.style.setProperty("--load", `${value}%`);
-          hint.textContent = value >= 100 ? "Готово" : `Загрузка ${Math.round(value)}%`;
+          shells.forEach((shell) => shell.style.setProperty("--load", `${value}%`));
+          const text = value >= 100 ? "Готово" : `Загрузка ${Math.round(value)}%`;
+          hints.forEach((hint) => { hint.textContent = text; });
           if (value >= 100) clearInterval(id);
         }, 160);
       })();

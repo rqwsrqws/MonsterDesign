@@ -229,3 +229,58 @@
     transition: none;
   }
 }
+
+.loader-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.loader-light.is-dark {
+  color: #f4f0ff;
+  background:
+    radial-gradient(720px 420px at 50% 42%, rgba(168, 85, 247, 0.22), transparent 58%),
+    linear-gradient(180deg, #09070f 0%, #11081c 48%, #07060e 100%);
+}
+
+.loader-light.is-dark .spider-web-base {
+  opacity: 0.72;
+  filter: brightness(1.35) saturate(1.15);
+}
+
+.loader-light.is-dark .pulse-ring {
+  border-color: rgba(232, 121, 249, 0.28);
+}
+
+.loader-light.is-dark .loader-shell,
+.loader-light.is-dark .loader-orb {
+  background: #16121c;
+}
+
+.loader-light.is-dark .loader-shell {
+  box-shadow:
+    0 10px 32px rgba(0, 0, 0, 0.45),
+    0 0 28px rgba(168, 85, 247, 0.18),
+    0 0 0 1px rgba(232, 121, 249, 0.16);
+}
+
+.loader-light.is-dark .loader-liquid {
+  background: linear-gradient(180deg, #e879f9 0%, #a855f7 48%, #6d28d9 100%);
+}
+
+.loader-light.is-dark .loader-wave {
+  fill: #e879f9;
+}
+
+.loader-light.is-dark .loader-brand {
+  color: #f4f0ff;
+}
+
+.loader-light.is-dark .loader-hint {
+  color: rgba(244, 240, 255, 0.55);
+}
+
+@media (max-width: 900px) {
+  .loader-pair {
+    grid-template-columns: 1fr;
+  }
+}

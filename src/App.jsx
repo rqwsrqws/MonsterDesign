@@ -8,7 +8,10 @@ export default function App() {
   return (
     <div className="app">
       <Hero replayKey={runId} onReplay={() => setRunId((n) => n + 1)} />
-      <LoaderLight />
+      <div className="loader-pair">
+        <LoaderLight />
+        <LoaderLight theme="dark" />
+      </div>
     </div>
   );
 }

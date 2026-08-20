@@ -3,7 +3,7 @@ import whiteSphereVideo from "../assets/spider-white-sphere.mp4";
 import spiderWeb from "../assets/spider-web.png";
 import "./LoaderLight.css";
 
-export default function LoaderLight({ progress }) {
+export default function LoaderLight({ progress, theme = "light" }) {
   const [simulated, setSimulated] = useState(0);
   const value = progress ?? simulated;
   const done = value >= 100;
@@ -21,7 +21,11 @@ export default function LoaderLight({ progress }) {
   }, [progress]);
 
   return (
-    <section className="loader-light" aria-label="Загрузка" aria-busy={!done}>
+    <section
+      className={`loader-light${theme === "dark" ? " is-dark" : ""}`}
+      aria-label="Загрузка"
+      aria-busy={!done}
+    >
       <div className="pulse-stage">
         <img className="spider-web spider-web-base" src={spiderWeb} alt="" />
         <div className="web-surge">
