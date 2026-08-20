@@ -1,13 +1,9 @@
 import logo3d from "../assets/spider-telegram-logo.png";
 import demoVideo from "../assets/generated_video.mp4";
-import walker from "../assets/walker-black.png";
-import whiteSphereVideo from "../assets/spider-white-sphere.mp4";
 import TelegramSpiderMark from "./TelegramSpiderMark.jsx";
-import ClimbingSpider from "./ClimbingSpider.jsx";
 import "./Hero.css";
-import "./ClimbingSpider.css";
 
-export default function Hero({ replayKey, onReplay }) {
+export default function Hero() {
   return (
     <section className="hero">
       <header className="topbar">
@@ -42,9 +38,8 @@ export default function Hero({ replayKey, onReplay }) {
         <div className="copy">
           <h1>
             Автоматический сбор лидов из{" "}
-            <span className="telegram-target" key={replayKey}>
+            <span className="telegram-target">
               <TelegramSpiderMark />
-              <ClimbingSpider />
               <span className="tg-word">Telegram</span>
             </span>
             -чатов
@@ -56,9 +51,6 @@ export default function Hero({ replayKey, onReplay }) {
           <div className="cta-row">
             <button type="button" className="cta">
               Начать бесплатно →
-            </button>
-            <button type="button" className="secondary" onClick={onReplay}>
-              Повторить анимацию
             </button>
           </div>
           <ul className="features">
@@ -80,48 +72,29 @@ export default function Hero({ replayKey, onReplay }) {
           />
           <aside className="preview" aria-hidden="true">
             <article className="card">
-            <header>
-              Новый лид · Radar <span>HOT</span>
-            </header>
-            <p>«Ищу обменник USDT, срочно»</p>
-          </article>
-          <article className="card">
-            <header>Нейрокомментинг</header>
-            <p>Комментарий под постом крипто-канала</p>
-          </article>
-          <article className="card">
-            <header>
-              Lead CRM <span className="new">New</span>
-            </header>
-            <p>@crypto_user</p>
-          </article>
-          <div className="stats">
-            <div>48 ключей</div>
-            <div>127 лидов</div>
-            <div className="today">Сегодня +34 лида</div>
-          </div>
-        </aside>
+              <header>
+                Новый лид · Radar <span>HOT</span>
+              </header>
+              <p>«Ищу обменник USDT, срочно»</p>
+            </article>
+            <article className="card">
+              <header>Нейрокомментинг</header>
+              <p>Комментарий под постом крипто-канала</p>
+            </article>
+            <article className="card">
+              <header>
+                Lead CRM <span className="new">New</span>
+              </header>
+              <p>@crypto_user</p>
+            </article>
+            <div className="stats">
+              <div>48 ключей</div>
+              <div>127 лидов</div>
+              <div className="today">Сегодня +34 лида</div>
+            </div>
+          </aside>
         </div>
       </div>
-
-      <section className="walk-row" aria-hidden="true">
-        <div className="sphere sphere-light">
-          <video
-            className="sphere-video"
-            src={whiteSphereVideo}
-            autoPlay
-            muted
-            loop
-            playsInline
-            disablePictureInPicture
-          />
-        </div>
-        <div className="sphere sphere-dark">
-          <div className="walker-track reverse">
-            <img className="walker invert" src={walker} alt="" />
-          </div>
-        </div>
-      </section>
     </section>
   );
 }
