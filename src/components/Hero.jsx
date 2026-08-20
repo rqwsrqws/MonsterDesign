@@ -1,5 +1,7 @@
 import logo3d from "../assets/spider-telegram-logo.png";
 import demoVideo from "../assets/generated_video.mp4";
+import walker from "../assets/walker-black.png";
+import whiteSphereVideo from "../assets/spider-white-sphere.mp4";
 import TelegramSpiderMark from "./TelegramSpiderMark.jsx";
 import ClimbingSpider from "./ClimbingSpider.jsx";
 import "./Hero.css";
@@ -102,15 +104,23 @@ export default function Hero({ replayKey, onReplay }) {
         </div>
       </div>
 
-      <section className="video-block">
-        <video
-          className="logo-anim"
-          src={demoVideo}
-          autoPlay
-          muted
-          playsInline
-          disablePictureInPicture
-        />
+      <section className="walk-row" aria-hidden="true">
+        <div className="sphere sphere-light">
+          <video
+            className="sphere-video"
+            src={whiteSphereVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            disablePictureInPicture
+          />
+        </div>
+        <div className="sphere sphere-dark">
+          <div className="walker-track reverse">
+            <img className="walker invert" src={walker} alt="" />
+          </div>
+        </div>
       </section>
     </section>
   );
