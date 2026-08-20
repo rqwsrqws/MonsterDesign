@@ -205,7 +205,7 @@
         pointer-events: none;
         background: transparent;
         border-radius: 50%;
-        clip-path: circle(48% at 50% 50%);
+        clip-path: circle(41% at 50% 50%);
       }
       .spider-web-base { opacity: 0.55; }
       .web-surge {
@@ -221,7 +221,7 @@
       .web-surge .spider-web { opacity: 1; filter: brightness(1.25); }
       .pulse-ring {
         position: absolute;
-        inset: 27%;
+        inset: 25%;
         border-radius: 50%;
         border: 1px solid rgba(124, 58, 237, 0.18);
         pointer-events: none;
@@ -230,16 +230,24 @@
       }
       .pulse-ring:nth-child(4) { animation-delay: 0.85s; }
       .pulse-ring:nth-child(5) { animation-delay: 1.7s; }
-      .loader-orb {
+      .loader-shell {
         position: relative;
         z-index: 1;
-        width: 46%;
-        height: 46%;
+        width: 50%;
+        height: 50%;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #f6f4f8;
+        box-shadow: 0 10px 28px rgba(42, 24, 56, 0.16), 0 22px 48px rgba(124, 58, 237, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.85);
+        animation: loader-breathe 2.6s ease-in-out infinite;
+      }
+      .loader-orb {
+        width: 70%;
+        height: 70%;
         border-radius: 50%;
         overflow: hidden;
-        background: #fff;
-        box-shadow: 0 10px 28px rgba(42, 24, 56, 0.16), 0 22px 48px rgba(124, 58, 237, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8);
-        animation: loader-breathe 2.6s ease-in-out infinite;
+        background: #f6f4f8;
       }
       .loader-video {
         width: 100%;
@@ -248,7 +256,7 @@
         object-position: center;
         display: block;
         pointer-events: none;
-        transform: scale(1.46);
+        transform: scale(1.22);
         transform-origin: center center;
       }
       .loader-brand {
@@ -335,8 +343,10 @@
         <span class="pulse-ring"></span>
         <span class="pulse-ring"></span>
         <span class="pulse-ring"></span>
-        <div class="loader-orb">
-          <video class="loader-video" src="./spider-white-sphere.mp4" autoplay muted loop playsinline disablepictureinpicture></video>
+        <div class="loader-shell">
+          <div class="loader-orb">
+            <video class="loader-video" src="./spider-white-sphere.mp4" autoplay muted loop playsinline disablepictureinpicture></video>
+          </div>
         </div>
       </div>
       <p class="loader-brand">Monster-Lead</p>
