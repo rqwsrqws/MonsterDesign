@@ -14,7 +14,6 @@ npm run dev
 ## Что вставлять в сайт
 
 - `src/components/Hero.jsx` — вся секция
-- `src/components/ClimbingSpider.jsx` — SVG-паук
 - `src/components/TelegramSpiderMark.jsx` — логотип Telegram
 - `src/components/Hero.css` — стили и анимация `climb-on-logo`
 
