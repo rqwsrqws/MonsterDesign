@@ -261,9 +261,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
   pointer-events: none;
   background: transparent;
+  transform: scale(1.46);
+  transform-origin: center center;
 }
 
 .sphere-dark {

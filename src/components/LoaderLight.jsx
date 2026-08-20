@@ -1,10 +1,15 @@
 import whiteSphereVideo from "../assets/spider-white-sphere.mp4";
+import spiderWeb from "../assets/spider-web.png";
 import "./LoaderLight.css";
 
 export default function LoaderLight() {
   return (
     <section className="loader-light" aria-label="Загрузка">
       <div className="pulse-stage">
+        <img className="spider-web spider-web-base" src={spiderWeb} alt="" />
+        <div className="web-surge">
+          <img className="spider-web" src={spiderWeb} alt="" />
+        </div>
         <span className="pulse-ring" />
         <span className="pulse-ring" />
         <span className="pulse-ring" />
