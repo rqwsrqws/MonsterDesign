@@ -362,18 +362,68 @@
         .loader-pair { grid-template-columns: 1fr; }
       }
       .sidebar-play {
-        padding: 48px 24px 72px;
+        padding: 48px 72px 72px;
         display: flex;
         justify-content: center;
+        overflow: visible;
         background: radial-gradient(600px 280px at 20% 0%, rgba(124, 58, 237, 0.18), transparent 55%), #09070f;
       }
       .sidebar-panel {
+        position: relative;
         width: min(100%, 320px);
         padding: 18px 12px 12px;
         border-radius: 22px;
         background: #0e0c14;
         border: 1px solid rgba(255, 255, 255, 0.06);
         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        overflow: visible;
+      }
+      .nav-drop {
+        position: absolute;
+        top: 0;
+        right: -28px;
+        width: 72px;
+        height: var(--drop-y, 168px);
+        pointer-events: none;
+        z-index: 4;
+        transform-origin: top center;
+        transition: height 0.85s cubic-bezier(0.22, 1.18, 0.36, 1);
+      }
+      .nav-silk {
+        position: absolute;
+        left: 50%;
+        top: 8px;
+        width: 2px;
+        height: calc(100% - 38px);
+        transform: translateX(-50%);
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(196, 181, 253, 0.05), #c4b5fd 22%, #a855f7);
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.75);
+      }
+      .nav-drop-spider {
+        position: absolute;
+        left: 50%;
+        bottom: -22px;
+        width: 68px;
+        height: auto;
+        transform: translateX(-50%);
+        transform-origin: 50% 8%;
+        filter: drop-shadow(0 10px 16px rgba(88, 28, 135, 0.55));
+        animation: spider-sway 2.8s ease-in-out infinite;
+      }
+      .nav-drop.is-landing .nav-drop-spider {
+        animation:
+          spider-land 0.7s cubic-bezier(0.22, 1.3, 0.36, 1),
+          spider-sway 2.8s ease-in-out 0.7s infinite;
+      }
+      @keyframes spider-land {
+        0% { transform: translateX(-50%) rotate(-11deg) scale(0.96); }
+        58% { transform: translateX(-50%) rotate(8deg) scale(1.04); }
+        100% { transform: translateX(-50%) rotate(-3deg) scale(1); }
+      }
+      @keyframes spider-sway {
+        0%, 100% { transform: translateX(-50%) rotate(-5deg); }
+        50% { transform: translateX(-50%) rotate(5deg); }
       }
       .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 8px 10px 18px; color: #f4f0ff; }
       .sidebar-mark {
@@ -383,14 +433,38 @@
       .sidebar-brand strong { display: block; font-size: 14px; }
       .sidebar-brand small { display: block; margin-top: 2px; font-size: 10px; letter-spacing: 0.12em; color: rgba(244, 240, 255, 0.5); }
       .nav-group { margin: 16px 10px 8px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244, 240, 255, 0.38); }
-      .nav-stack { display: flex; flex-direction: column; gap: 6px; }
+      .nav-stack { display: flex; flex-direction: column; gap: 6px; overflow: visible; }
       .nav-btn, .user-card {
+        position: relative; isolation: isolate; overflow: visible; z-index: 0;
         width: 100%; display: flex; align-items: center; gap: 10px; border: 0; cursor: pointer;
         text-align: left; font-family: inherit; color: rgba(244, 240, 255, 0.86); background: transparent;
       }
-      .nav-btn { min-height: 44px; padding: 0 12px; border-radius: 14px; }
+      .nav-btn { min-height: 48px; padding: 0 12px 0 14px; border-radius: 16px; color: rgba(228, 222, 245, 0.72); }
       .nav-btn:hover { background: rgba(255, 255, 255, 0.04); }
-      .nav-btn.is-active { background: rgba(124, 58, 237, 0.16); box-shadow: inset 3px 0 0 #a855f7; color: #f4f0ff; }
+      .nav-btn.is-active, .user-card.is-active {
+        z-index: 2; overflow: hidden; border-radius: 16px; color: #f4f0ff;
+        background: rgba(88, 48, 148, 0.22); box-shadow: inset 3px 0 0 #a855f7; border: 0;
+      }
+      .nav-btn.is-active .nav-ico {
+        width: 28px; height: 28px; border-radius: 8px; color: #f3e8ff; background: rgba(124, 58, 237, 0.42);
+      }
+      .nav-btn.is-active::before, .nav-btn.is-active::after,
+      .user-card.is-active::before, .user-card.is-active::after {
+        content: ""; position: absolute; inset: 0; pointer-events: none;
+        background: url("./literal-web.png") 18% 48% / 160% 240% no-repeat;
+        mix-blend-mode: screen;
+        filter: grayscale(1) brightness(2.35) contrast(1.2);
+      }
+      .nav-btn.is-active::before, .user-card.is-active::before {
+        opacity: 0.42; clip-path: inset(0 0 0 100%);
+        animation: web-weave 1.55s cubic-bezier(0.45, 0.05, 0.2, 1) forwards;
+      }
+      .nav-btn.is-active::after, .user-card.is-active::after { content: none; }
+      .nav-btn > *, .user-card > * { position: relative; z-index: 1; }
+      @keyframes web-weave {
+        from { opacity: 0.16; clip-path: inset(0 0 0 100%); }
+        to { opacity: 0.42; clip-path: inset(0 0 0 0); }
+      }
       .nav-btn.is-active .nav-ico { color: #f4f0ff; }
       .nav-btn.is-active .nav-num { color: #f4f0ff; background: #6d28d9; }
       .nav-ico, .nav-num, .nav-chev { display: grid; place-items: center; flex: 0 0 auto; color: rgba(244, 240, 255, 0.7); }
@@ -399,7 +473,6 @@
       .nav-badge { padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; color: #e9d5ff; background: rgba(124, 58, 237, 0.35); }
       .nav-chev { transform: rotate(90deg); opacity: 0.45; }
       .user-card { margin-top: 14px; padding: 10px; border-radius: 16px; background: #16121c; border: 1px solid rgba(255, 255, 255, 0.05); }
-      .user-card.is-active { box-shadow: inset 3px 0 0 #a855f7; background: rgba(124, 58, 237, 0.16); }
       .user-ava { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #7c3aed, #db2777); }
       .user-meta strong { display: block; font-size: 13px; }
       .user-meta em { margin-left: 6px; font-style: normal; font-size: 10px; font-weight: 800; color: #fbbf24; }
@@ -487,6 +560,10 @@
     </div>
     <section class="sidebar-play" aria-label="Кнопки меню">
       <div class="sidebar-panel">
+        <div class="nav-drop" aria-hidden="true">
+          <span class="nav-silk"></span>
+          <img class="nav-drop-spider" src="./spider-orb.png" alt="" />
+        </div>
         <div class="sidebar-brand">
           <span class="sidebar-mark"></span>
           <div>
@@ -494,12 +571,14 @@
             <small>CRM SYSTEM</small>
           </div>
         </div>
+        <p class="nav-group">Главное</p>
         <div class="nav-stack">
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">⌘</span><span class="nav-label">Терминал</span><span class="nav-chev">›</span></button>
+          <button type="button" class="nav-btn is-active" onclick="selectNav(this)"><span class="nav-ico">▦</span><span class="nav-label">Дашборд</span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">⌘</span><span class="nav-label">Терминал</span></button>
           <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">▣</span><span class="nav-label">Моя компания</span></button>
           <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">☺</span><span class="nav-label">Lead CRM</span></button>
-          <button type="button" class="nav-btn is-active" onclick="selectNav(this)"><span class="nav-ico">💬</span><span class="nav-label">Ответы ботов</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">⌕</span><span class="nav-label">Поиск лидов</span><span class="nav-badge">Бесплатно</span><span class="nav-chev">›</span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">💬</span><span class="nav-label">Ответы ботов</span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">◎</span><span class="nav-label">Поиск лидов</span><span class="nav-badge">Бесплатно</span><span class="nav-chev">›</span></button>
         </div>
         <p class="nav-group">Пошагово</p>
         <div class="nav-stack">
@@ -542,11 +621,25 @@
         }, 160);
       })();
 
+      function dropSpiderTo(btn) {
+        const panel = document.querySelector(".sidebar-panel");
+        const drop = panel && panel.querySelector(".nav-drop");
+        if (!panel || !drop || !btn) return;
+        const y = btn.offsetTop + btn.offsetHeight / 2;
+        drop.style.setProperty("--drop-y", y + "px");
+        drop.classList.remove("is-landing");
+        void drop.offsetWidth;
+        drop.classList.add("is-landing");
+      }
+
       function selectNav(btn) {
         document.querySelectorAll(".sidebar-panel .nav-btn, .sidebar-panel .user-card").forEach((el) => {
           el.classList.toggle("is-active", el === btn);
         });
+        dropSpiderTo(btn);
       }
+
+      dropSpiderTo(document.querySelector(".sidebar-panel .is-active"));
     </script>
   </body>
 </html>
