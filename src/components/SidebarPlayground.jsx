@@ -1,5 +1,6 @@
-import { forwardRef, useLayoutEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from "react";
 import spiderOrb from "../assets/spider-orb.png";
+import telegramSphere from "../assets/telegram-sphere.png";
 import "./SidebarPlayground.css";
 
 function Icon({ path, size = 18 }) {
@@ -26,42 +27,93 @@ const I = {
 const NavBtn = forwardRef(function NavBtn({ icon, children, active, badge, numbered, chevron, onSelect }, ref) {
   return (
     <button ref={ref} type="button" className={`nav-btn${active ? " is-active" : ""}`} onClick={onSelect}>
+      <span className="nav-web" aria-hidden="true" />
       {numbered ? <span className="nav-num">{numbered}</span> : <span className="nav-ico"><Icon path={icon} /></span>}
       <span className="nav-label">{children}</span>
       {badge ? <span className="nav-badge">{badge}</span> : null}
       {chevron ? <span className="nav-chev"><Icon path={I.chevron} size={14} /></span> : null}
+      <span className="nav-socket" aria-hidden="true">
+        <img className="nav-orb" src={telegramSphere} alt="" />
+      </span>
     </button>
   );
 });
 
 export default function SidebarPlayground() {
+  const [light, setLight] = useState(false);
   const [active, setActive] = useState("dash");
   const panelRef = useRef(null);
   const dropRef = useRef(null);
   const itemsRef = useRef({});
+  const activeRef = useRef(active);
+  const targetY = useRef(168);
+  const currentY = useRef(168);
+  const tracking = useRef(false);
+  activeRef.current = active;
+
+  const clampY = (y) => {
+    const panel = panelRef.current;
+    if (!panel) return y;
+    return Math.min(panel.offsetHeight - 20, Math.max(36, y));
+  };
+
+  const setTarget = (y, isTracking) => {
+    tracking.current = isTracking;
+    targetY.current = clampY(y);
+  };
+
+  const snapToActive = () => {
+    const item = itemsRef.current[activeRef.current];
+    if (!item) return;
+    setTarget(item.offsetTop + item.offsetHeight / 2, false);
+  };
+
+  useEffect(() => {
+    const drop = dropRef.current;
+    if (!drop) return;
+    let frame = 0;
+    const tick = () => {
+      const ease = tracking.current ? 0.28 : 0.16;
+      currentY.current += (targetY.current - currentY.current) * ease;
+      drop.style.setProperty("--drop-y", `${currentY.current}px`);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   useLayoutEffect(() => {
-    const panel = panelRef.current;
-    const drop = dropRef.current;
-    const item = itemsRef.current[active];
-    if (!panel || !drop || !item) return;
-    const y = item.offsetTop + item.offsetHeight / 2;
-    drop.style.setProperty("--drop-y", `${y}px`);
-    drop.classList.remove("is-landing");
-    void drop.offsetWidth;
-    drop.classList.add("is-landing");
-  }, [active]);
+    snapToActive();
+    currentY.current = targetY.current;
+  }, []);
 
   const bind = (id) => (node) => {
     itemsRef.current[id] = node;
   };
 
+  const themeClass = `sidebar-play${light ? " is-light" : ""}`;
+  const themeLabel = light ? "Тёмная тема" : "Светлая тема";
+  const toggleTheme = () => setLight((on) => !on);
+
   return (
-    <section className="sidebar-play" aria-label="Кнопки меню">
-      <div className="sidebar-panel" ref={panelRef}>
+    <>
+    <section className={themeClass} aria-label="Кнопки меню">
+      <button type="button" className="theme-switch" onClick={toggleTheme}>{themeLabel}</button>
+      <div
+        className="sidebar-panel"
+        ref={panelRef}
+        onMouseMove={(event) => {
+          const panel = panelRef.current;
+          if (!panel) return;
+          setTarget(event.clientY - panel.getBoundingClientRect().top, true);
+        }}
+        onMouseLeave={snapToActive}
+      >
         <div className="nav-drop" ref={dropRef} aria-hidden="true">
           <span className="nav-silk" />
-          <img className="nav-drop-spider" src={spiderOrb} alt="" />
+          <span className="nav-drop-pin">
+            <img className="nav-drop-spider" src={spiderOrb} alt="" />
+          </span>
         </div>
 
         <div className="sidebar-brand">
@@ -95,20 +147,29 @@ export default function SidebarPlayground() {
           <NavBtn ref={bind("shop")} icon={I.shop} active={active === "shop"} onSelect={() => setActive("shop")}>Магазин</NavBtn>
           <NavBtn ref={bind("wallet")} icon={I.wallet} active={active === "wallet"} onSelect={() => setActive("wallet")}>Кошелёк</NavBtn>
         </div>
+      </div>
+    </section>
 
+    <section className={themeClass} aria-label="Карточка пользователя">
+      <button type="button" className="theme-switch" onClick={toggleTheme}>{themeLabel}</button>
+      <p className="play-title">Карточка пользователя</p>
+      <div className="sidebar-panel">
         <button
-          ref={bind("user")}
           type="button"
-          className={`user-card${active === "user" ? " is-active" : ""}`}
-          onClick={() => setActive("user")}
+          className="user-card is-active"
         >
+          <span className="nav-web" aria-hidden="true" />
           <span className="user-ava">LO</span>
           <span className="user-meta">
             <strong>lordakatsukid <em>ADM</em></strong>
             <small>Enterprise Pack · 0 сессий ∞</small>
           </span>
+          <span className="nav-socket" aria-hidden="true">
+            <img className="nav-orb" src={telegramSphere} alt="" />
+          </span>
         </button>
       </div>
     </section>
+    </>
   );
 }

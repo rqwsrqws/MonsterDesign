@@ -362,15 +362,26 @@
         .loader-pair { grid-template-columns: 1fr; }
       }
       .sidebar-play {
-        padding: 48px 72px 72px;
+        padding: 48px 80px 72px 48px;
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
         overflow: visible;
         background: radial-gradient(600px 280px at 20% 0%, rgba(124, 58, 237, 0.18), transparent 55%), #09070f;
       }
+      .theme-switch {
+        margin: 0 0 18px; padding: 8px 16px; border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.08);
+        color: #f4f0ff; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600;
+      }
+      .play-title {
+        margin: 0 0 16px; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+        color: rgba(244, 240, 255, 0.45);
+      }
       .sidebar-panel {
         position: relative;
-        width: min(100%, 320px);
+        width: min(100%, 376px);
         padding: 18px 12px 12px;
         border-radius: 22px;
         background: #0e0c14;
@@ -381,49 +392,40 @@
       .nav-drop {
         position: absolute;
         top: 0;
-        right: -28px;
-        width: 72px;
-        height: var(--drop-y, 168px);
+        right: -32px;
+        width: 64px;
+        height: 100%;
         pointer-events: none;
-        z-index: 4;
-        transform-origin: top center;
-        transition: height 0.85s cubic-bezier(0.22, 1.18, 0.36, 1);
+        z-index: 5;
       }
       .nav-silk {
         position: absolute;
         left: 50%;
-        top: 8px;
+        top: 0;
         width: 2px;
-        height: calc(100% - 38px);
+        height: var(--drop-y, 168px);
         transform: translateX(-50%);
         border-radius: 999px;
         background: linear-gradient(180deg, rgba(196, 181, 253, 0.05), #c4b5fd 22%, #a855f7);
         box-shadow: 0 0 10px rgba(168, 85, 247, 0.75);
       }
-      .nav-drop-spider {
+      .nav-drop-pin {
         position: absolute;
         left: 50%;
-        bottom: -22px;
-        width: 68px;
+        top: var(--drop-y, 168px);
+        transform: translate(-50%, -50%);
+      }
+      .nav-drop-spider {
+        display: block;
+        width: 58px;
         height: auto;
-        transform: translateX(-50%);
         transform-origin: 50% 8%;
         filter: drop-shadow(0 10px 16px rgba(88, 28, 135, 0.55));
         animation: spider-sway 2.8s ease-in-out infinite;
       }
-      .nav-drop.is-landing .nav-drop-spider {
-        animation:
-          spider-land 0.7s cubic-bezier(0.22, 1.3, 0.36, 1),
-          spider-sway 2.8s ease-in-out 0.7s infinite;
-      }
-      @keyframes spider-land {
-        0% { transform: translateX(-50%) rotate(-11deg) scale(0.96); }
-        58% { transform: translateX(-50%) rotate(8deg) scale(1.04); }
-        100% { transform: translateX(-50%) rotate(-3deg) scale(1); }
-      }
       @keyframes spider-sway {
-        0%, 100% { transform: translateX(-50%) rotate(-5deg); }
-        50% { transform: translateX(-50%) rotate(5deg); }
+        0%, 100% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
       }
       .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 8px 10px 18px; color: #f4f0ff; }
       .sidebar-mark {
@@ -436,47 +438,147 @@
       .nav-stack { display: flex; flex-direction: column; gap: 6px; overflow: visible; }
       .nav-btn, .user-card {
         position: relative; isolation: isolate; overflow: visible; z-index: 0;
-        width: 100%; display: flex; align-items: center; gap: 10px; border: 0; cursor: pointer;
+        width: 100%; display: flex; align-items: center; gap: 10px; border: 1px solid transparent; cursor: pointer;
         text-align: left; font-family: inherit; color: rgba(244, 240, 255, 0.86); background: transparent;
+        outline: none; -webkit-tap-highlight-color: transparent;
+        --slot: 38px; --slot-right: 5px;
       }
-      .nav-btn { min-height: 48px; padding: 0 12px 0 14px; border-radius: 16px; color: rgba(228, 222, 245, 0.72); }
-      .nav-btn:hover { background: rgba(255, 255, 255, 0.04); }
+      .nav-btn:focus, .nav-btn:focus-visible, .nav-btn:active,
+      .user-card:focus, .user-card:focus-visible, .user-card:active { outline: none; }
+      .nav-btn::-moz-focus-inner, .user-card::-moz-focus-inner { border: 0; }
+      .nav-btn {
+        --btn-fill: transparent;
+        height: 48px; min-height: 48px;
+        padding: 0 calc(var(--slot-right) + var(--slot) + 14px) 0 14px;
+        border-radius: 16px; color: rgba(228, 222, 245, 0.72); line-height: 1;
+        transition: box-shadow 0.25s ease, background 0.25s ease;
+        background: radial-gradient(circle calc(var(--slot) / 2) at calc(100% - (var(--slot-right) + var(--slot) / 2)) 50%, transparent calc(var(--slot) / 2 - 0.5px), var(--btn-fill) calc(var(--slot) / 2 + 0.5px));
+      }
+      .nav-socket {
+        position: absolute; right: var(--slot-right); top: 50%; width: var(--slot); height: var(--slot);
+        margin-top: calc(var(--slot) / -2);
+        border-radius: 50%; pointer-events: none; overflow: hidden;
+        background: rgba(5, 4, 10, 0.55); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      }
+      .nav-orb {
+        position: absolute; inset: -29%; width: 158%; height: 158%; max-width: none;
+        object-fit: cover; object-position: center; opacity: 0; transform: none;
+        transition: opacity 0.2s ease;
+      }
+      .nav-btn:hover:not(.is-active) .nav-orb, .user-card:hover:not(.is-active) .nav-orb { opacity: 0.34; }
+      .nav-btn.is-active .nav-orb, .user-card.is-active .nav-orb { opacity: 1; }
+      .nav-btn:hover { --btn-fill: rgba(255, 255, 255, 0.04); }
+      .nav-btn:hover:not(.is-active), .user-card:hover:not(.is-active) { box-shadow: 0 0 14px rgba(34, 211, 238, 0.22); }
       .nav-btn.is-active, .user-card.is-active {
-        z-index: 2; overflow: hidden; border-radius: 16px; color: #f4f0ff;
-        background: rgba(88, 48, 148, 0.22); box-shadow: inset 3px 0 0 #a855f7; border: 0;
+        --btn-fill: rgba(12, 28, 58, 0.72);
+        z-index: 2; overflow: visible; border-radius: 16px; color: #f4f0ff;
+        border: 1px solid transparent;
+        box-shadow: none;
+      }
+      .nav-btn.is-active .nav-socket, .user-card.is-active .nav-socket {
+        background: transparent;
+        box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.75), 0 0 10px rgba(34, 211, 238, 0.8), 0 0 20px rgba(14, 165, 233, 0.45);
       }
       .nav-btn.is-active .nav-ico {
-        width: 28px; height: 28px; border-radius: 8px; color: #f3e8ff; background: rgba(124, 58, 237, 0.42);
+        color: #f3e8ff; background: rgba(124, 58, 237, 0.42);
       }
-      .nav-btn.is-active::before, .nav-btn.is-active::after,
-      .user-card.is-active::before, .user-card.is-active::after {
-        content: ""; position: absolute; inset: 0; pointer-events: none;
-        background: url("./literal-web.png") 18% 48% / 160% 240% no-repeat;
-        mix-blend-mode: screen;
-        filter: grayscale(1) brightness(2.35) contrast(1.2);
+      .nav-btn.is-active::before, .user-card.is-active::before { display: none; }
+      .nav-web {
+        position: absolute; inset: 0; z-index: 0; overflow: hidden; border-radius: 16px;
+        pointer-events: none; opacity: 0; isolation: isolate; mix-blend-mode: screen;
       }
-      .nav-btn.is-active::before, .user-card.is-active::before {
-        opacity: 0.42; clip-path: inset(0 0 0 100%);
-        animation: web-weave 1.55s cubic-bezier(0.45, 0.05, 0.2, 1) forwards;
+      .nav-btn.is-active .nav-web, .user-card.is-active .nav-web {
+        --web-at: calc(100% - (var(--slot-right) + var(--slot) / 2));
+        opacity: 1; clip-path: inset(0 0 0 100% round 16px);
+        -webkit-mask-image: radial-gradient(circle calc(var(--slot) / 2) at var(--web-at) 50%, transparent calc(var(--slot) / 2 - 0.5px), #000 calc(var(--slot) / 2 + 0.5px));
+        mask-image: radial-gradient(circle calc(var(--slot) / 2) at var(--web-at) 50%, transparent calc(var(--slot) / 2 - 0.5px), #000 calc(var(--slot) / 2 + 0.5px));
+        animation: web-weave 1.35s cubic-bezier(0.45, 0.05, 0.2, 1) forwards;
       }
-      .nav-btn.is-active::after, .user-card.is-active::after { content: none; }
-      .nav-btn > *, .user-card > * { position: relative; z-index: 1; }
+      .nav-web::before, .nav-web::after {
+        content: ""; position: absolute; width: 188px; height: 188px;
+        background: url("./spider-web.png") 46% 40% / 170% 170% no-repeat;
+        mix-blend-mode: normal;
+        filter: brightness(1.35) saturate(1.05); opacity: 0.46;
+        -webkit-mask-image: radial-gradient(circle at 38% 52%, #000 18%, transparent 72%);
+        mask-image: radial-gradient(circle at 38% 52%, #000 18%, transparent 72%);
+      }
+      .nav-web::before { left: -18%; top: -62%; transform: rotate(-52deg); }
+      .nav-web::after { right: -14%; top: -70%; transform: rotate(28deg); }
+      .nav-btn.is-active::after, .user-card.is-active::after {
+        content: ""; position: absolute; inset: 0; border-radius: 16px; pointer-events: none; z-index: 0;
+        border: 1px solid rgba(125, 211, 252, 0.85);
+        box-shadow: inset 0 0 18px rgba(14, 165, 233, 0.28), 0 0 6px rgba(125, 211, 252, 0.95), 0 0 18px rgba(34, 211, 238, 0.7), 0 0 36px rgba(59, 130, 246, 0.38);
+        clip-path: inset(0 0 0 calc(100% + 24px) round 16px);
+        animation: neon-spread 1.35s cubic-bezier(0.45, 0.05, 0.2, 1) both, neon-idle 2.4s 1.35s ease-in-out infinite;
+      }
+      @keyframes neon-spread {
+        from { clip-path: inset(0 0 0 calc(100% + 24px) round 16px); }
+        to { clip-path: inset(0 round 16px); }
+      }
+      @keyframes neon-idle {
+        0%, 100% { box-shadow: inset 0 0 18px rgba(14, 165, 233, 0.28), 0 0 6px rgba(125, 211, 252, 0.95), 0 0 18px rgba(34, 211, 238, 0.7), 0 0 36px rgba(59, 130, 246, 0.38); }
+        50% { box-shadow: inset 0 0 22px rgba(14, 165, 233, 0.38), 0 0 10px rgba(186, 230, 253, 1), 0 0 26px rgba(34, 211, 238, 0.85), 0 0 48px rgba(59, 130, 246, 0.48); }
+      }
+      .nav-btn > *:not(.nav-socket):not(.nav-web), .user-card > *:not(.nav-socket):not(.nav-web) { position: relative; z-index: 1; }
+      .nav-btn > .nav-socket, .user-card > .nav-socket { position: absolute; z-index: 3; }
       @keyframes web-weave {
-        from { opacity: 0.16; clip-path: inset(0 0 0 100%); }
-        to { opacity: 0.42; clip-path: inset(0 0 0 0); }
+        from { opacity: 0.16; clip-path: inset(0 0 0 100% round 16px); }
+        to { opacity: 1; clip-path: inset(0 round 16px); }
       }
       .nav-btn.is-active .nav-ico { color: #f4f0ff; }
       .nav-btn.is-active .nav-num { color: #f4f0ff; background: #6d28d9; }
       .nav-ico, .nav-num, .nav-chev { display: grid; place-items: center; flex: 0 0 auto; color: rgba(244, 240, 255, 0.7); }
+      .nav-ico { width: 28px; height: 28px; border-radius: 8px; }
       .nav-num { width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 800; color: #ddd6fe; background: #3b0764; }
       .nav-label { flex: 1; font-size: 14px; }
       .nav-badge { padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; color: #e9d5ff; background: rgba(124, 58, 237, 0.35); }
       .nav-chev { transform: rotate(90deg); opacity: 0.45; }
-      .user-card { margin-top: 14px; padding: 10px; border-radius: 16px; background: #16121c; border: 1px solid rgba(255, 255, 255, 0.05); }
+      .user-card {
+        --btn-fill: #16121c; margin-top: 0;
+        padding: 10px calc(var(--slot-right) + var(--slot) + 14px) 10px 10px;
+        border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05);
+        background: radial-gradient(circle calc(var(--slot) / 2) at calc(100% - (var(--slot-right) + var(--slot) / 2)) 50%, transparent calc(var(--slot) / 2 - 0.5px), var(--btn-fill) calc(var(--slot) / 2 + 0.5px));
+      }
       .user-ava { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #7c3aed, #db2777); }
       .user-meta strong { display: block; font-size: 13px; }
       .user-meta em { margin-left: 6px; font-style: normal; font-size: 10px; font-weight: 800; color: #fbbf24; }
       .user-meta small { display: block; margin-top: 3px; font-size: 11px; color: rgba(244, 240, 255, 0.48); }
+      .sidebar-play.is-light {
+        color: #2e2156;
+        background: radial-gradient(600px 280px at 20% 0%, rgba(167, 139, 250, 0.28), transparent 55%), #f5f2fb;
+      }
+      .sidebar-play.is-light .theme-switch { border-color: rgba(109, 40, 217, 0.22); background: #fff; color: #5b21b6; }
+      .sidebar-play.is-light .play-title { color: #9ca3af; }
+      .sidebar-play.is-light .sidebar-panel { background: #fff; border-color: #e8e2f2; box-shadow: 0 18px 44px rgba(88, 28, 135, 0.1); }
+      .sidebar-play.is-light .sidebar-brand { color: #6d28d9; }
+      .sidebar-play.is-light .sidebar-brand small { color: #a78bfa; }
+      .sidebar-play.is-light .nav-group { color: #9ca3af; }
+      .sidebar-play.is-light .nav-btn, .sidebar-play.is-light .nav-ico, .sidebar-play.is-light .nav-chev { color: #6b7280; }
+      .sidebar-play.is-light .nav-btn { --btn-fill: #f3f4f6; }
+      .sidebar-play.is-light .nav-btn:hover { --btn-fill: #ece8f7; }
+      .sidebar-play.is-light .nav-btn:hover:not(.is-active), .sidebar-play.is-light .user-card:hover:not(.is-active) { box-shadow: 0 0 14px rgba(167, 139, 250, 0.28); }
+      .sidebar-play.is-light .nav-socket { background: rgba(243, 244, 246, 0.9); box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08); }
+      .sidebar-play.is-light .nav-btn.is-active, .sidebar-play.is-light .user-card.is-active {
+        --btn-fill: #efe7ff;
+        color: #4c1d95;
+      }
+      .sidebar-play.is-light .nav-btn.is-active .nav-ico { color: #6d28d9; background: rgba(124, 58, 237, 0.16); }
+      .sidebar-play.is-light .nav-btn.is-active .nav-num { color: #fff; background: #7c3aed; }
+      .sidebar-play.is-light .nav-num { color: #6d28d9; background: #ede9fe; }
+      .sidebar-play.is-light .nav-badge { color: #6d28d9; background: #ede9fe; }
+      .sidebar-play.is-light .nav-web { mix-blend-mode: multiply; }
+      .sidebar-play.is-light .nav-web::before, .sidebar-play.is-light .nav-web::after { opacity: 0.38; filter: brightness(0.85) saturate(1.2); }
+      .sidebar-play.is-light .nav-btn.is-active::after, .sidebar-play.is-light .user-card.is-active::after {
+        border-color: rgba(125, 211, 252, 0.9);
+        box-shadow: inset 0 0 18px rgba(14, 165, 233, 0.28), 0 0 6px rgba(125, 211, 252, 0.95), 0 0 18px rgba(34, 211, 238, 0.7), 0 0 36px rgba(59, 130, 246, 0.38);
+      }
+      .sidebar-play.is-light .nav-btn.is-active .nav-socket, .sidebar-play.is-light .user-card.is-active .nav-socket {
+        box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.75), 0 0 10px rgba(34, 211, 238, 0.8), 0 0 20px rgba(14, 165, 233, 0.45);
+      }
+      .sidebar-play.is-light .user-card { --btn-fill: #fff; border: 1px solid #e5e7eb; }
+      .sidebar-play.is-light .user-meta strong { color: #111827; }
+      .sidebar-play.is-light .user-meta small { color: #6b7280; }
+      .sidebar-play.is-light .nav-silk { background: linear-gradient(180deg, rgba(167, 139, 250, 0.08), #c4b5fd 22%, #7c3aed); }
     </style>
   </head>
   <body>
@@ -559,10 +661,13 @@
     </section>
     </div>
     <section class="sidebar-play" aria-label="Кнопки меню">
+      <button type="button" class="theme-switch" onclick="toggleTheme()">Светлая тема</button>
       <div class="sidebar-panel">
         <div class="nav-drop" aria-hidden="true">
           <span class="nav-silk"></span>
-          <img class="nav-drop-spider" src="./spider-orb.png" alt="" />
+          <span class="nav-drop-pin">
+            <img class="nav-drop-spider" src="./spider-orb.png" alt="" />
+          </span>
         </div>
         <div class="sidebar-brand">
           <span class="sidebar-mark"></span>
@@ -573,31 +678,39 @@
         </div>
         <p class="nav-group">Главное</p>
         <div class="nav-stack">
-          <button type="button" class="nav-btn is-active" onclick="selectNav(this)"><span class="nav-ico">▦</span><span class="nav-label">Дашборд</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">⌘</span><span class="nav-label">Терминал</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">▣</span><span class="nav-label">Моя компания</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">☺</span><span class="nav-label">Lead CRM</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">💬</span><span class="nav-label">Ответы ботов</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">◎</span><span class="nav-label">Поиск лидов</span><span class="nav-badge">Бесплатно</span><span class="nav-chev">›</span></button>
+          <button type="button" class="nav-btn is-active" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">▦</span><span class="nav-label">Дашборд</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">⌘</span><span class="nav-label">Терминал</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">▣</span><span class="nav-label">Моя компания</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">☺</span><span class="nav-label">Lead CRM</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">💬</span><span class="nav-label">Ответы ботов</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">◎</span><span class="nav-label">Поиск лидов</span><span class="nav-badge">Бесплатно</span><span class="nav-chev">›</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
         </div>
         <p class="nav-group">Пошагово</p>
         <div class="nav-stack">
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-num">1</span><span class="nav-label">Настройка</span><span class="nav-chev">›</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-num">2</span><span class="nav-label">Работа с сессией</span><span class="nav-chev">›</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-num">3</span><span class="nav-label">Работа с каналом</span><span class="nav-chev">›</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">☺</span><span class="nav-label">Команда</span><span class="nav-chev">›</span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-num">1</span><span class="nav-label">Настройка</span><span class="nav-chev">›</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-num">2</span><span class="nav-label">Работа с сессией</span><span class="nav-chev">›</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-num">3</span><span class="nav-label">Работа с каналом</span><span class="nav-chev">›</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">☺</span><span class="nav-label">Команда</span><span class="nav-chev">›</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
         </div>
         <p class="nav-group">Сервисы</p>
         <div class="nav-stack">
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">🏪</span><span class="nav-label">Магазин</span></button>
-          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-ico">👛</span><span class="nav-label">Кошелёк</span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">🏪</span><span class="nav-label">Магазин</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
+          <button type="button" class="nav-btn" onclick="selectNav(this)"><span class="nav-web"></span><span class="nav-ico">👛</span><span class="nav-label">Кошелёк</span><span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span></button>
         </div>
-        <button type="button" class="user-card" onclick="selectNav(this)">
+      </div>
+    </section>
+    <section class="sidebar-play" aria-label="Карточка пользователя">
+      <button type="button" class="theme-switch" onclick="toggleTheme()">Светлая тема</button>
+      <p class="play-title">Карточка пользователя</p>
+      <div class="sidebar-panel">
+        <button type="button" class="user-card is-active">
+          <span class="nav-web"></span>
           <span class="user-ava">LO</span>
           <span class="user-meta">
             <strong>lordakatsukid <em>ADM</em></strong>
             <small>Enterprise Pack · 0 сессий ∞</small>
           </span>
+          <span class="nav-socket"><img class="nav-orb" src="./telegram-sphere.png" alt="" /></span>
         </button>
       </div>
     </section>
@@ -621,25 +734,65 @@
         }, 160);
       })();
 
-      function dropSpiderTo(btn) {
+      (function spiderFollow() {
         const panel = document.querySelector(".sidebar-panel");
         const drop = panel && panel.querySelector(".nav-drop");
-        if (!panel || !drop || !btn) return;
-        const y = btn.offsetTop + btn.offsetHeight / 2;
-        drop.style.setProperty("--drop-y", y + "px");
-        drop.classList.remove("is-landing");
-        void drop.offsetWidth;
-        drop.classList.add("is-landing");
-      }
+        if (!panel || !drop) return;
+        let target = 168;
+        let current = 168;
+        let tracking = false;
+
+        function clamp(y) {
+          return Math.min(panel.offsetHeight - 20, Math.max(36, y));
+        }
+
+        function setTarget(y, isTracking) {
+          tracking = isTracking;
+          target = clamp(y);
+        }
+
+        function snapToActive() {
+          const btn = panel.querySelector(".is-active");
+          if (!btn) return;
+          setTarget(btn.offsetTop + btn.offsetHeight / 2, false);
+        }
+
+        function tick() {
+          current += (target - current) * (tracking ? 0.28 : 0.16);
+          drop.style.setProperty("--drop-y", current + "px");
+          requestAnimationFrame(tick);
+        }
+
+        panel.addEventListener("mousemove", (event) => {
+          setTarget(event.clientY - panel.getBoundingClientRect().top, true);
+        });
+        panel.addEventListener("mouseleave", snapToActive);
+
+        window.dropSpiderTo = function (btn) {
+          if (!btn) return;
+          setTarget(btn.offsetTop + btn.offsetHeight / 2, false);
+        };
+
+        snapToActive();
+        current = target;
+        tick();
+      })();
 
       function selectNav(btn) {
-        document.querySelectorAll(".sidebar-panel .nav-btn, .sidebar-panel .user-card").forEach((el) => {
+        const panel = btn.closest(".sidebar-panel");
+        if (!panel) return;
+        panel.querySelectorAll(".nav-btn, .user-card").forEach((el) => {
           el.classList.toggle("is-active", el === btn);
         });
-        dropSpiderTo(btn);
       }
 
-      dropSpiderTo(document.querySelector(".sidebar-panel .is-active"));
+      function toggleTheme() {
+        document.querySelectorAll(".sidebar-play").forEach((el) => el.classList.toggle("is-light"));
+        const light = document.querySelector(".sidebar-play").classList.contains("is-light");
+        document.querySelectorAll(".theme-switch").forEach((btn) => {
+          btn.textContent = light ? "Тёмная тема" : "Светлая тема";
+        });
+      }
     </script>
   </body>
 </html>
